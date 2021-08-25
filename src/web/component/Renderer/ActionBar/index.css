@@ -1,0 +1,49 @@
+.action-bar-wrapper {
+    position: relative;
+    text-align: left;
+    padding: 15px 0;
+    display: inline-block;
+    vertical-align: top;
+    min-width: 70px;
+}
+.ant-form-item-children .action-bar-wrapper {
+    padding: 0;
+}
+/* .ant-row .action-bar-wrapper {
+    width: 100%;
+}
+.multiple .ant-row .action-bar-wrapper {
+    width: initial;
+} */
+.action-bar-wrapper.block + .action-bar-wrapper.block {
+    margin-top: 10px;
+}
+.action-bar {
+    position: absolute;
+    z-index: 999;
+    right: 0;
+    top: -20px;
+    color: #000;
+    display: none;
+    font-size: 16px;
+    line-height: initial;
+}
+.action-bar .anticon {
+    border-radius: 50%;
+    background: #fff;
+    font-size: 12px;
+}
+.action-bar .anticon:not(:last-child) {
+    margin-right: 6px;
+}
+.header-box .drop-container>.edit-icon {
+    right: 5px;
+}
+.container .edit-icon.anticon-close-circle {
+    top: -6px;
+    right: -6px;
+}
+.drop-container:hover>.action-bar,
+.action-bar-wrapper:hover>.action-bar {
+    display: block;
+}

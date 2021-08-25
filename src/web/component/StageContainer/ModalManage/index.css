@@ -1,0 +1,14 @@
+.modal-manage-wrapper .ant-table-thead > tr > th,
+.modal-manage-wrapper .ant-table-tbody > tr > td {
+    padding: 4px;
+}
+.modal-manage-wrapper .ant-table-tbody button {
+    padding: 0 2px;
+}
+.modal-stage-wrapper .ant-modal-body {
+    height: 800px;
+    padding: 0;
+}
+.modal-stage-wrapper .ant-modal-body>.ant-layout {
+    height: 100%;
+}

@@ -1,0 +1,13 @@
+.preview-mode .dashed-box {
+    outline: none;
+}
+.dashed-box {
+    position: relative;
+    outline: 1px dashed #efefef;
+}
+.dashed-box.multiple {
+    outline: none;
+}
+.dashed-box:hover {
+    outline-color: #1890ff;
+}

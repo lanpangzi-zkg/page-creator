@@ -1,0 +1,46 @@
+.main-container {
+	position: relative;
+	margin: 24px 10px 10px;
+    padding: 10px;
+	background-color: #fff;
+    min-height: calc(100% - 33px);
+    border-top: 1px solid transparent;
+}
+.panel-header .edit-modal {
+    cursor: pointer;
+    color: #1890ff;
+    margin-left: 10px;
+}
+.panel-header .edit-modal:hover {
+    text-decoration: underline;
+}
+.edit-mode {
+    margin: 24px 14px 10px;
+}
+.edit-mode .edit-mode {
+    margin: 10px 0 24px;
+}
+
+.edit-mode .drop-container>div {
+    text-align: left;
+}
+.ant-form:after {
+	content: '';
+	display: table;
+	clear: both;
+}
+.empty-tips {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -77px;
+    margin-top: -21px;
+}
+.empty-tips span {
+    color: #bdbdbd;
+    border: 1px dotted;
+    padding: 10px 20px;
+}
+.props-editor.ant-drawer .ant-form-item-label {
+    line-height: 39.9999px;
+}

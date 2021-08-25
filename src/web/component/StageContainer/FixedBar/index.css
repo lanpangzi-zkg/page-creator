@@ -1,0 +1,21 @@
+.fixed-bar {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    z-index: 99;
+    font-size: 18px;
+    border: 1px solid #031d35;
+    border-radius: 2px;
+}
+.fixed-bar .anticon {
+    display: block;
+    padding: 5px;
+    cursor: pointer;
+}
+.fixed-bar .anticon + .anticon {
+    margin-top: 5px;
+    border-top: inherit;
+}
+.fixed-bar .anticon:hover {
+    color: #3a98f7;
+}

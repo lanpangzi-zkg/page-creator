@@ -1,0 +1,17 @@
+.drag-menu-box .ant-divider-inner-text {
+    color: #fff;
+}
+.drag-menu-box .drag-item {
+    cursor: move;
+    margin: 5px;
+    width: 88px;
+    padding: 10px 5px;
+    color: #bfbfbf;
+    text-align: center;
+    display: inline-block;
+    background: #304f6f;
+    box-shadow: 2px 2px 0px #000000;
+}
+.drag-menu-box .drag-item:hover {
+    color: #fff;
+}

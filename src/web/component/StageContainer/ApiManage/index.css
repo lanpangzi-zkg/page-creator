@@ -1,0 +1,7 @@
+.api-manage-wrapper .ant-table-thead > tr > th,
+.api-manage-wrapper .ant-table-tbody > tr > td {
+    padding: 4px;
+}
+.api-manage-wrapper .ant-table-tbody button {
+    padding: 0 2px;
+}

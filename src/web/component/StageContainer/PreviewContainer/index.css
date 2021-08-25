@@ -1,0 +1,20 @@
+.preview-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    z-index: 9;
+    padding: 15px;
+}
+.preview-container .dashed-box {
+    padding: 0;
+    outline: none;
+}
+.preview-container .action-bar-wrapper {
+    /* width: initial; */
+    height: initial;
+    vertical-align: initial;
+    padding: 0;
+}

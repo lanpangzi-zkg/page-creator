@@ -1,0 +1,12 @@
+.props-editor .ant-input-number {
+    width: 100%;
+}
+.props-editor .ant-table {
+    overflow: auto;
+}
+.props-editor .ant-table .ant-table-body {
+    margin: 0;
+}
+.props-editor .btn-box {
+    text-align: center;
+}

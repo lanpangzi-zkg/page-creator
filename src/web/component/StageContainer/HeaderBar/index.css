@@ -1,0 +1,23 @@
+.header-bar {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    text-align: center;
+    color: #949393;
+}
+.header-bar ul {
+    list-style: none;
+    margin-bottom: 0;
+    padding: 0;
+    display: flex;
+    line-height: 1.3;
+}
+.header-bar ul li {
+    cursor: pointer;
+}
+.header-bar ul li:hover {
+    color: #fff;
+}
+.header-bar ul li + li {
+    margin-left: 20px;
+}

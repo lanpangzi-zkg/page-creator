@@ -1,0 +1,21 @@
+.form-container {
+    position: relative;
+    font-size: 0;
+}
+.form-container .inner-box {
+    padding: 15px 10px;
+    background-color: #fff;
+}
+.form-container .icon-operation {
+    top: -6px;
+}
+.form-container .ant-form {
+    text-align: left;
+    padding: 0 24px;
+}
+.preview-box.form-container {
+    /* padding: 0 24px; */
+}
+.preview-box.form-container .ant-form .ant-row {
+    margin-bottom: 0;
+}

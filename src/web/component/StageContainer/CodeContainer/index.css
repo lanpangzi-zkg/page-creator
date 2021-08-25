@@ -1,0 +1,38 @@
+.code-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    z-index: 9;
+}
+.code-container .ant-layout {
+    height: 100%;
+    background: transparent;
+}
+.code-container .top-bar {
+    position: absolute;
+    right: 0;
+}
+.code-container .top-bar button {
+    font-size: 12px;
+}
+.code-container .top-bar button + button {
+    margin-left: 5px;
+}
+.code-container .ant-layout-sider {
+    border-right: 1px solid #f0f2f5;
+    background: #ececec;
+}
+.code-container .code-wrap {
+    background-image: linear-gradient(to bottom, #f1f1f1 50%, #fff 0);
+    background-size: 100% 2em;
+    line-height: 1;
+    margin: 0;
+    font-size: 16px;
+    tab-size: 4;
+    height: 100%;
+    padding: 0 5px;
+    background-attachment: local;
+}

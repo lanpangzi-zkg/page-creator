@@ -1,0 +1,37 @@
+.edit-icon-wrapper {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    font-size: 16px;
+    color: #000;
+    z-index: 999;
+}
+.edit-icon-wrapper .anticon {
+    padding: 3px;
+    box-shadow: 0 0 2px 2px #e2e2e2;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #eee;
+    font-size: 12px;
+}
+.edit-icon-wrapper .anticon:not(:last-child) {
+    margin-right: 6px;
+}
+.edit-icon-wrapper .anticon:hover {
+    box-shadow: 0 0 2px 2px #aad6ff;
+}
+.header-box .drop-container>.edit-icon {
+    right: 5px;
+}
+.container .edit-icon.anticon-close-circle {
+    top: -6px;
+    right: -6px;
+}
+.container:hover>.edit-icon-wrapper,
+.drop-container:hover>.edit-icon-wrapper,
+.box-container:hover>.edit-icon-wrapper,
+.line-box:hover>.edit-icon-wrapper {
+    display: block;
+}

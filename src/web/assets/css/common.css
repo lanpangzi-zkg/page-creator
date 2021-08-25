@@ -1,0 +1,163 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+      "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.logo {
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    background: url(../images/logo.png) no-repeat;
+    background-position: 0 -1px;
+}
+.top-tabs {
+    position: absolute;
+    z-index: 1;
+    left: 9px;
+    right: 10px;
+    background: #f0f2f5;
+}
+.top-tabs .ant-tabs-bar {
+    margin-bottom: 0;
+}
+.ant-tabs.top-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-nav-container {
+    height: initial;
+}
+.ant-tabs.top-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
+    font-size: 12px;
+    height: 2em;
+    line-height: 2em;
+    padding: 0 5px;
+}
+.ant-layout-header {
+    text-align: left;
+}
+
+.ant-layout-header .app-name {
+    font-size: 16px;
+    margin-left: -18px;
+}
+.btn-groups {
+    position: fixed;
+    right: 21px;
+    top: 16px;
+}
+.btn-groups .btn-preview, .btn-groups .btn-preview:active, .btn-groups .btn-preview:focus {
+    background: transparent;
+    border: none;
+    color: #BBBBBE;
+}
+.btn-groups .btn-preview:hover {
+    color: #fff;
+    background: transparent;
+}
+.ant-layout-header, .ant-layout-sider {
+    color: #fff;
+}
+.ant-layout-header {
+    background: #031d35;
+}
+.ant-layout-sider {
+    overflow-y: auto;
+}
+
+.main-spin {
+    height: 100%;
+}
+.main-spin .ant-spin-container {
+    height: 100%;
+    float: left;
+    width: 100%;
+}
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+#root {
+    height: inherit;
+}
+.App {
+    height: inherit;
+    display: flex;
+}
+.block {
+    display: block !important;
+}
+.App-logo {
+    animation: App-logo-spin infinite 20s linear;
+    height: 40vmin;
+    pointer-events: none;
+}
+  
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+  
+.App-link {
+    color: #61dafb;
+}
+.preview-box .ant-modal, .preview-box .ant-modal .ant-modal-content {
+    height: 100%;
+}
+.preview-box .ant-modal {
+    padding-bottom: 0;
+}
+.table-box {
+    margin-bottom: 16px;
+    flex: 1 1;
+}
+.table-box .ant-table-thead td {
+    background: #d6d6d6;
+}
+.btn-group button:not(:last-child) {
+    margin-right: 10px;
+}
+.anticon-drag {
+    margin: auto;
+    font-size: 18px;
+    color: #d6d2d2;
+}
+
+/* .ant-drawer .ant-form-item-label {
+    line-height: initial;
+} */
+.ant-drawer .ant-divider-horizontal {
+    margin: 10px 0; 
+}
+.ant-drawer .ant-row.ant-form-item {
+    margin-bottom: 5px;
+}
+.ant-drawer .btn-box {
+    margin-top: 20px;
+}
+.ant-drawer .ant-card-body {
+    padding: 5px;
+}
+.ant-drawer .ant-card-head {
+    min-height:initial;
+    padding: 0 8px;
+}
+.ant-drawer .ant-card-head .ant-card-extra {
+    padding: 5px 0;
+}
+.ant-drawer .ant-card-head .ant-card-head-title {
+    padding: 0;
+    margin: 5px 0;
+}
+.ant-drawer .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

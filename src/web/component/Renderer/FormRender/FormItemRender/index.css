@@ -1,0 +1,7 @@
+.form-container .drop-container {
+    position: relative;
+    display: inline-block;
+}
+.form-container .dashed-box .ant-form-item {
+    padding-top: 15px;
+}
