@@ -76,7 +76,6 @@ class FormRender extends PureComponent {
     onAddFormItem() {
         const newFormItemSchema = Object.assign({}, FormItemSchema);
         newFormItemSchema.uid = this.uid++;
-        newFormItemSchema.editProps.submitId.value = Date.now();
         newFormItemSchema.return = this.props.configs;
         const { onUpdateRootConfigs } = this.context;
         onUpdateRootConfigs(newFormItemSchema);

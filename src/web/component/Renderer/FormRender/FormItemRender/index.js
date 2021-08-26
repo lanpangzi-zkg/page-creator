@@ -17,6 +17,33 @@ class FormItemRender extends Dropable {
     componentDidMount() {
         this.didMount();
     }
+    // componentDidUpdate() {
+    //     const currentNode = this.dropContainer?.current;
+    //     if (currentNode) {
+    //         const { top: baseTop, height } = currentNode.getBoundingClientRect();
+    //         let prevNode = currentNode;
+    //         let nextNode = currentNode;
+    //         let currentHeight = height;
+    //         let clientRect = null;
+    //         while((prevNode = prevNode.previousElementSibling)) {
+    //             clientRect = prevNode.getBoundingClientRect();
+    //             if (clientRect.top !== baseTop) {
+    //                 break;
+    //             }
+    //             currentHeight = Math.max(currentHeight, clientRect.height);
+    //         }
+    //         while((nextNode = nextNode.nextElementSibling)) {
+    //             clientRect = nextNode.getBoundingClientRect();
+    //             if (clientRect.top !== baseTop) {
+    //                 break;
+    //             }
+    //             currentHeight = Math.max(currentHeight, clientRect.height);
+    //         }
+    //         if (currentHeight > height) {
+    //             currentNode.style.height = `${currentHeight}px`;
+    //         }
+    //     }
+    // }
     componentWillUnmount() {
         this.beforeUnmount();
     }

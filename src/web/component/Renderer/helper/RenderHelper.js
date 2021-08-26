@@ -55,7 +55,7 @@ const renderAtomComponent = (configs, preview, formInjectProps = {}) => {
         case 'RadioGroup':
             return <RenderRadioGroup {...props} />;
         case 'Button':
-            return <RenderButton {...props} />;
+            return <RenderButton {...props} form={formInjectProps?.form} />; // button需要获取form对象的引用，便于重置表单
         case 'Divider':
             return <RenderDivider {...props} />;
         case 'Input':

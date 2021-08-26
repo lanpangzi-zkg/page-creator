@@ -1,53 +1,19 @@
 import { style } from './logic';
 
-// FormItem内嵌套Button，那么就不编辑label和submitId
-const renderExp = "return (this.props.editSchema.children || []).every(({ component }) => { return component !== 'Button'; })";
+// FormItem内嵌套Button或者没有子组件，那么就不编辑label
+const renderExp = "const children = (this.props.editSchema.children || []); return children.length > 0 && children.every(({ component }) => { return component !== 'Button'; })";
 
 export default {
     name: 'FormItem',
     component: 'FormItem',
     isContainer: true,
     editProps: {
-        // submitId: {
-        //     label: 'id',
-        //     type: 'Input',
-        //     rules: [{
-        //         required: true,
-        //         message: '请输入',
-        //     }],
-        //     isRender: renderExp,
-        // },
         label: {
             label: 'label',
             type: 'Input',
             value: 'label',
             isRender: renderExp,
         },
-        // arrayTypeProps: {
-        //     arrayTypeValue: 'rules',
-        //     isRender: renderExp,
-        //     required: {
-        //         label: 'required',
-        //         type: 'Boolean',
-        //     },
-        //     message: {
-        //         label: 'message',
-        //         type: 'Input',
-        //     },
-        //     type: {
-        //         label: 'type',
-        //         type: 'Select',
-        //         options: ['string', 'number', 'boolean', 'integer', 'date', 'url', 'email']
-        //     },
-        //     pattern: {
-        //         label: 'pattern',
-        //         type: 'Input',
-        //     },
-        //     whitespace: {
-        //         label: 'whitespace',
-        //         type: 'Boolean',
-        //     },
-        // },
         style,
         colspan: {
             label: '跨列数',

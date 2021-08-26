@@ -6,9 +6,14 @@ class RenderButton extends BaseRender {
         return propKey === 'text';
     }
     render() {
-        const { rawProps, logicProps } = this.props;
-        const { text } = rawProps;
+        const { rawProps, logicProps, form } = this.props;
+        const { text, htmlType } = rawProps;
         const componentProps = this.getComponentProps();
+        if (htmlType === 'reset' && form) { // 是包裹在form内部的重置按钮，重新onClick方法
+            componentProps.onClick = () => {
+                form.resetFields();
+            };
+        }
         if (logicProps?.confirmText) {
             const { onClick, ...restProps } = componentProps;
             return (

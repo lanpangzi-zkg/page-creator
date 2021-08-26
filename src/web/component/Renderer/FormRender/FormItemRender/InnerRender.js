@@ -49,6 +49,7 @@ class innerRender extends Component {
         }
         return (
             <CommonRender
+                form={form}
                 preview={preview}
                 configs={configs}
             />

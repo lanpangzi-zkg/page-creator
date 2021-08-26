@@ -61,12 +61,12 @@ class CommonRender extends PureComponent {
         return null;
     }
     renderContent() {
-        const { configs, preview, value, onChange } = this.props;
+        const { configs, preview, value, onChange, form } = this.props;
         const { isContainer } = configs;
         if(isContainer) {
             return renderComponent(configs, preview, { value, onChange });
         }
-        return renderAtomComponent(configs, preview, { value, onChange });
+        return renderAtomComponent(configs, preview, { value, onChange, form });
     }
     render() {
         return (
