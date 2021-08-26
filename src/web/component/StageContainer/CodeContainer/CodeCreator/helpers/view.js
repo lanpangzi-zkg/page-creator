@@ -21,7 +21,7 @@ function getObjectStringStart(objectString, tag) {
 function wrapObjectStringEnd(str, spaces, tag) {
     return `${str}\n${spaces}${tag}`;
 }
-const KeyValueRE = /(\w+):\s*(\[[\w,."'`]+\]|[\w+._"'`]+)/g;
+const KeyValueRE = /(["'\w]+):\s*(\[[\w,."'`]+\]|[\w+._"'`]+)/g;
 function breakObjectString(context, objectString, keepFormatQueue = []) {
     const spaces = addSpaces(context, context.spaceOffset + 1);
     const nextSpaces = addSpaces(context, context.spaceOffset + 2);
@@ -108,7 +108,7 @@ function addPropsToCode(context, propsQueue, keepFormatQueue) {
 function patchProps(context, props) {
     return Object.keys(props)
     .filter((k) => {
-        return isNotEmptyValue(props[k]);
+        return isNotEmptyValue(props[k]) && k !== 'submitId' && k !== 'rules';
     })
     .reduce((arr, key) => {
         arr.push(`${parseSingleProp(context, key, props)}`);
@@ -238,7 +238,10 @@ function getEventHandler(expression, eventType, modalName, requestApi) {
         case 'openModal':
             return `{() => { this.setState({ ${modalName}Visible: true }); }}`;
         default:
-            return expression ? `{(event) => {${deleteExpSpace(expression)}}}` : '{()=> {}}';
+            if (expression) {
+                return `{(event) => {${deleteExpSpace(expression)}}}`;
+            }
+            return null;
     }
 }
 /**
@@ -261,14 +264,13 @@ function addNewParentLine(context, codeObj, newCodeStr) {
     decreaseSpaceOffset(context);
     appendCode(context, codeObj, newCodeStr);
 }
-const wrapFieldDecoratorQueue = ['Select', 'Checkbox', 'RadioGroup', 'DatePicker'];
 /**
  * @desc 解析子组件及其自身配置
  * @param {*} context 
  * @param {*} config 
  * @param {*} subComponent 对于有嵌套子组件且不是容器组件，如Select/Option，指定义子组件的渲染标签
  */
-function parseWithDFS(context, config, subComponent, formChild) {
+function parseWithDFS(context, config, inForm, subComponent) {
     const { schemaProps, component, importName, logicProps } = config;
     addImport(context, importName || component);
     let rawProps = schemaProps;
@@ -283,23 +285,18 @@ function parseWithDFS(context, config, subComponent, formChild) {
     const logicQueue = patchLogic(context, logicProps);
     propsQueue.push(...logicQueue);
     let renderWithoutFieldDecorator = true;
-    if (formChild && wrapFieldDecoratorQueue.includes(component)) {
-        let parent = config;
-        while((parent = parent.return)) {
-            if (parent.component === 'FormItem') {
-                break;
-            }
-        }
-        if (parent) { // 包裹在Form.Item里面
-            wrapFieldDecorator(context, render, parent?.schemaProps || {});
-            increaseSpaceOffset(context);
-            appendCode(context, render, `<${component}${addPropsToCode(context, propsQueue)}>`);
-            renderWithoutFieldDecorator = false;
-        }
+    if (inForm && config.canWrapFieldDecorator) {
+        wrapFieldDecorator(context, render, config?.schemaProps || {});
+        increaseSpaceOffset(context);
+        increaseSpaceOffset(context);
+        appendCode(context, render, `<${component}${addPropsToCode(context, propsQueue)}>`);
+        decreaseSpaceOffset(context);
+        appendCode(context, render, '</Form.Item>');
+        renderWithoutFieldDecorator = false;
     }
     renderWithoutFieldDecorator && appendCode(context, render, `${getRenderCondition(logicProps?.isRender)}<${component}${addPropsToCode(context, propsQueue)}>`);
     if (isContainerComponent) {
-        parseChildren(config.children, context);
+        parseChildren(config.children, context, inForm);
     } else {
         parseSubComponents(schemaProps.children, context, subComponent);
     }
@@ -325,12 +322,12 @@ function parseWithChildNode(context, config, isAddImport = true) {
     }
     afterParseComponent(context, config);
 }
-function parseChildren(children, context, formChild = false) {
+function parseChildren(children, context, inForm = false) {
     if (Array.isArray(children)) {
         children.forEach((child) => {
             const { component } = child;
             const parseHelper = context.helpers[component];
-            parseHelper && parseHelper(context, child, formChild);
+            parseHelper && parseHelper(context, child, inForm);
         });
     }
 }
@@ -459,6 +456,8 @@ function createOnSubmitMethod(context, bindApi) {
     addMethodToContext(context, 'onSubmit', 'e', onSubmitBodyQueue.join('\n'));
 }
 function wrapFieldDecorator(context, render,{ submitId = 'id', rules }) {
+    appendCode(context, render, '<Form.Item>');
+    increaseSpaceOffset(context);
     if (Array.isArray(rules) && rules.length > 0) {
         appendCode(context, render, `{getFieldDecorator('${submitId}', {`);
         const ruleStrQueue = rules.reduce((arr, rule) => {
@@ -476,6 +475,7 @@ function wrapFieldDecorator(context, render,{ submitId = 'id', rules }) {
     } else {
         appendCode(context, render, `{getFieldDecorator('${submitId}')(`);
     }
+    decreaseSpaceOffset(context);
 }
 const helpers = {
     Modal(context, config) {
@@ -657,20 +657,20 @@ const helpers = {
         appendCode(context, render, `<Table${addPropsToCode(context, propsQueue, ['pageSize', 'total', 'current'])}/>`);
         afterParseComponent(context, config);
     },
-    RadioGroup(context, config, formChild) {
-        parseWithDFS(context, config, 'Radio.Group', formChild);
+    RadioGroup(context, config, inForm) {
+        parseWithDFS(context, config, inForm, 'Radio.Group');
     },
-    Checkbox(context, config, formChild) {
+    Checkbox(context, config, inForm) {
         const render = beforeParseComponent(context, config);
         const { schemaProps, logicProps = {} } = config;
         addImport(context, 'Checkbox');
         const propsQueue = patchProps(context, schemaProps);
         const logicQueue = patchLogic(context, logicProps);
         propsQueue.push(...logicQueue);
-        formComponentRender(context, render, propsQueue, formChild, 'Checkbox.Group', logicProps?.isRender);
+        formComponentRender(context, config, render, propsQueue, inForm, 'Checkbox.Group', logicProps?.isRender);
         afterParseComponent(context, config);
     },
-    DatePicker(context, config, formChild) {
+    DatePicker(context, config, inForm) {
         const render = beforeParseComponent(context, config);
         addImport(context, 'DatePicker');
         addImport(context, 'moment', 'moment', true);
@@ -678,14 +678,14 @@ const helpers = {
         const propsQueue = patchProps(context, schemaProps);
         const logicQueue = patchLogic(context, logicProps);
         propsQueue.push(...logicQueue);
-        formComponentRender(context, render, propsQueue, formChild, 'DatePicker', logicProps?.isRender);
+        formComponentRender(context, config, render, propsQueue, inForm, 'DatePicker', logicProps?.isRender);
         afterParseComponent(context, config);
     },
-    Breadcrumb(context, config) {
-        parseWithDFS(context, config, 'Breadcrumb.Item');
+    Breadcrumb(context, config, inForm) {
+        parseWithDFS(context, config, inForm, 'Breadcrumb.Item');
     },
-    Select(context, config, formChild) {
-        parseWithDFS(context, config, 'Select.Option', formChild);
+    Select(context, config, inForm) {
+        parseWithDFS(context, config, inForm, 'Select.Option');
     },
     span(context, config) {
         parseWithChildNode(context, config, false);
@@ -693,11 +693,11 @@ const helpers = {
     Divider(context, config) {
         parseWithChildNode(context, config);
     },
-    Row(context, config) {
-        parseWithDFS(context, config);
+    Row(context, config, inForm) {
+        parseWithDFS(context, config, inForm);
     },
-    Col(context, config) {
-        parseWithDFS(context, config);
+    Col(context, config, inForm) {
+        parseWithDFS(context, config, inForm);
     },
     Icon(context, config) {
         parseWithChildNode(context, config);
@@ -733,13 +733,14 @@ const helpers = {
             propsQueue.push(`${eventName}=${eventHandler}`);
         }
         const { text = '', htmlType } = schemaProps;
-        if (htmlType === 'submit') { // 去掉click事件
-            const clickIndex = propsQueue.findIndex((p) => {
-                return p.includes(`${eventName}=`);
-            });
-            if (clickIndex >= 0) {
-                propsQueue.splice(clickIndex, 1);
-            }
+        const clickIndex = propsQueue.findIndex((p) => {
+            return p.includes(`${eventName}=`);
+        });
+        if (htmlType === 'submit' && clickIndex >= 0) { // 去掉click事件
+            propsQueue.splice(clickIndex, 1);
+        }
+        if (htmlType === 'reset' && clickIndex >= 0) { // 重写
+            propsQueue[clickIndex] = `${eventName}={() => { this.props.form.resetFields(); }}`;
         }
         appendCode(context, render, `${getRenderCondition(isRender)}<Button${addPropsToCode(context, propsQueue)}>`);
         addNewChildLine(context, render, text);
@@ -823,14 +824,14 @@ const helpers = {
         appendCode(context, render, `</Col>`);
         afterParseComponent(context, config);
     },
-    Input(context, config, formChild = false) {
+    Input(context, config, inForm) {
         const render = beforeParseComponent(context, config);
         const { schemaProps, logicProps = {} } = config;
         addImport(context, 'Input');
         const propsQueue = patchProps(context, schemaProps);
         const logicQueue = patchLogic(context, logicProps);
         propsQueue.push(...logicQueue);
-        formComponentRender(context, render, propsQueue, formChild, 'Input', logicProps?.isRender);
+        formComponentRender(context, config, render, propsQueue, inForm, 'Input', logicProps?.isRender);
         afterParseComponent(context, config);
     },
 }
@@ -853,22 +854,18 @@ function patchLogic(context, logicProps) {
     }
     return logicQueue;
 }
-function formComponentRender(context, render, propsQueue, formChild, component, isRender, selfClose = true) {
-    if (formChild) {
-        let parent = config;
-        while((parent = parent.return)) {
-            if (parent.component === 'FormItem') {
-                break;
-            }
-        }
-        if (parent) { // 包裹在Form.Item里面
-            const { schemaProps } = parent;
-            wrapFieldDecorator(context, render, schemaProps || {});
-            increaseSpaceOffset(context);
-            appendCode(context, render, `<${component} ${addPropsToCode(context, propsQueue)}/>`);
-            decreaseSpaceOffset(context);
-            appendCode(context, render, `)}`);
-        }
+function formComponentRender(context, config, render, propsQueue, inForm, component, isRender, selfClose = true) {
+    if (inForm) {
+        const { schemaProps } = config;
+        wrapFieldDecorator(context, render, schemaProps || {});
+        increaseSpaceOffset(context);
+        increaseSpaceOffset(context);
+        appendCode(context, render, `<${component} ${addPropsToCode(context, propsQueue)}/>`);
+        decreaseSpaceOffset(context);
+        appendCode(context, render, `)}`);
+        decreaseSpaceOffset(context);
+        appendCode(context, render, '</Form.Item>');
+        // }
     } else {
         appendCode(context, render, `${getRenderCondition(isRender)}<${component} ${addPropsToCode(context, propsQueue)}${selfClose ? ' /': ''}>`);
     }

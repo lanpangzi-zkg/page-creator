@@ -1,7 +1,16 @@
 .form-container .drop-container {
+    float: left;
     position: relative;
+}
+.form-container .drop-container>.ant-col {
     display: inline-block;
 }
-.form-container .dashed-box .ant-form-item {
-    padding-top: 15px;
+.form-container .child-item {
+    display: inherit;
+}
+.form-container .drop-container.single>.ant-col {
+    display: block;
+}
+.preview-box.form-container .drop-container>.ant-col {
+    width: 100%;
 }

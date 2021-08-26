@@ -1,10 +1,10 @@
 import React from 'react';
-import AtomRender from "../AtomRender";
 import FormRender from '../FormRender';
 import GridRender from '../GridRender';
 import TabsRender from '../TabsRender';
 import TableRender from "../TableRender";
 import ModalRender from '../ModalRender';
+import CommonRender from '../CommonRender';
 import { parseStyle } from './PropsHelper';
 import RenderIcon from './Render/RenderIcon';
 import RenderLabel from './Render/RenderLabel';
@@ -17,8 +17,19 @@ import RenderDatePicker from './Render/RenderDatePicker';
 import RenderBreadcrumb from './Render/RenderBreadcrumb';
 import RenderRadioGroup from './Render/RenderRadioGroup';
 
-const renderComponent = (preview, { name, schemaProps, logicProps }, formInjectProps = {}) => {
+/**
+ * @desc 渲染单个原子组件
+ * @param {*} configs 
+ * @param {*} preview 
+ * @param {*} formInjectProps 
+ * @returns 
+ */
+const renderAtomComponent = (configs, preview, formInjectProps = {}) => {
+    const { uid, name, schemaProps = {}, logicProps, canWrapFieldDecorator } = configs;
     const rawProps = Object.keys(schemaProps).reduce((obj, k) => {
+        if (k === 'submitId' || k === 'rules') {
+            return obj;
+        }
         // 过滤组件属性的空值
         if (Number.isInteger(schemaProps[k]) || !!schemaProps[k]) {
             obj[k] = schemaProps[k];
@@ -33,37 +44,50 @@ const renderComponent = (preview, { name, schemaProps, logicProps }, formInjectP
         rawProps,
         preview,
         logicProps,
+        key: uid,
     };
+    if (canWrapFieldDecorator) {
+        props.formInjectProps = formInjectProps;
+    }
     switch(name) {
         case 'Modal':
             return <ModalRender {...props} />;
         case 'RadioGroup':
-            return <RenderRadioGroup {...props} formInjectProps={formInjectProps} />;
+            return <RenderRadioGroup {...props} />;
         case 'Button':
             return <RenderButton {...props} />;
         case 'Divider':
             return <RenderDivider {...props} />;
         case 'Input':
-            return <RenderInput {...props} formInjectProps={formInjectProps} />;
+            return <RenderInput {...props} />;
         case 'Label':
             return <RenderLabel {...props} />;
         case 'Select':
-            return <RenderSelect {...props} formInjectProps={formInjectProps} />;
+            return <RenderSelect {...props} />;
         case 'Checkbox':
-            return <RenderCheckbox {...props} formInjectProps={formInjectProps} />;
+            return <RenderCheckbox {...props} />;
         case 'DatePicker':
-            return <RenderDatePicker {...props} formInjectProps={formInjectProps} />
+            return <RenderDatePicker {...props} />;
         case 'Icon':
             return <RenderIcon {...props} />;
         case 'Breadcrumb':
             return <RenderBreadcrumb {...props} />;
+        default:
+            return null;
     }
 };
-
-function renderPageComponent(configs, preview) {
+/**
+ * @desc 渲染组件入口，渲染容器和原子组件
+ * @param {*} configs 
+ * @param {*} preview 
+ * @param  {...any} rest 
+ * @returns 
+ */
+function renderComponent(configs, preview, ...rest) {
     const props = {
         preview,
         configs,
+        ...rest,
     };
     const { name, uid } = configs;
     switch(name) {
@@ -76,14 +100,20 @@ function renderPageComponent(configs, preview) {
         case 'Tabs':
             return <TabsRender key={uid} {...props} />;
         default:
-            return <AtomRender key={uid} {...props} />;
+            return <CommonRender key={uid} {...props} isAtom />;
     }
 }
+/**
+ * @desc 渲染舞台
+ * @param {*} rootConfigs 
+ * @param {*} preview 
+ * @returns 
+ */
 function renderStage(rootConfigs, preview) {
     const { children = [] } = rootConfigs;
     if (children.length > 0) {
         return children.map((child) => {
-            return renderPageComponent(child, preview);
+            return renderComponent(child, preview);
         });
     }
     return (
@@ -92,7 +122,13 @@ function renderStage(rootConfigs, preview) {
         </div>
     );
 }
-
+/**
+ * @desc 渲染组件左上角标签，目前支持【组件名称】和【API】两种标签
+ * @param {*} componentName 
+ * @param {*} preview 
+ * @param {*} tagName 
+ * @returns 
+ */
 function renderTag(componentName, preview, tagName) {
     if (preview) {
         return null;
@@ -104,7 +140,7 @@ function renderTag(componentName, preview, tagName) {
                 left: '0',
                 zIndex: 9,
                 color: '#fff',
-                lineHeight: 1.2,
+                lineHeight: 1,
                 fontSize: '12px',
                 width: 'initial',
                 position: 'absolute',
@@ -112,9 +148,10 @@ function renderTag(componentName, preview, tagName) {
         >
             <span
                 style={{
-                    background: '#bbbbbb',
+                    background: '#cacaca',
                     padding: '0 2px',
                     borderRadius: '3px',
+                    display: 'inline-block',
                 }}
             >
                 {componentName}
@@ -127,6 +164,7 @@ function renderTag(componentName, preview, tagName) {
                         padding: '0 2px',
                         borderRadius: '3px',
                         marginLeft: '2px',
+                        display: 'inline-block',
                     }}
                 >
                     {tagName}
@@ -138,8 +176,8 @@ function renderTag(componentName, preview, tagName) {
 
 export default renderComponent;
 export {
-    parseStyle,
     renderTag,
+    parseStyle,
     renderStage,
-    renderPageComponent,
+    renderAtomComponent,
 };

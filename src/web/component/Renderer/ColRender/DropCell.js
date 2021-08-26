@@ -1,17 +1,17 @@
 import React from 'react';
-import ActionBar from '../ActionBar';
+import { Form } from 'antd';
 import Dropable from '../../Core/Dropable';
+import CommonRender from '../CommonRender';
 import AppContext from '../../../shared/AppContext';
 import renderComponent from '../helper/RenderHelper';
-import { reactiveClassName } from '../helper/PropsHelper';
-
+import getInitialValue, { initFormWrapEditProps } from '../helper/PropsHelper';
 class DropCell extends Dropable {
     constructor(props) {
         super(props);
         this.uid = 0;
+        this.bindEventContext();
         this.dropContainer = React.createRef();
         this.dropTargetClassName = `col-drop-${Date.now()}`;
-        this.bindEventContext();
     }
     componentDidMount() {
         this.didMount();
@@ -19,9 +19,32 @@ class DropCell extends Dropable {
     componentWillUnmount() {
         this.beforeUnmount();
     }
+    renderContent(configs) {
+        const { form, preview } = this.props;
+        if (form && configs.canWrapFieldDecorator) {
+            initFormWrapEditProps(configs);
+            const { getFieldDecorator } = form;
+            const { submitId, rules } = configs.schemaProps;
+            return (
+                <Form.Item>
+                    {
+                        getFieldDecorator(String(submitId), {
+                            rules: rules || [],
+                            initialValue: getInitialValue(configs),
+                        })(
+                            <CommonRender
+                                preview={preview}
+                                configs={configs}
+                            />
+                        )
+                    }
+                </Form.Item>
+            );
+        }
+        return renderComponent(configs, preview);
+    }
     render() {
-        const { children, preview } = this.props;
-        const { onShowPropsEditor, onDeleteConfig } = this.context;
+        const { children } = this.props;
         return (
             <div
                 ref={this.dropContainer}
@@ -29,6 +52,9 @@ class DropCell extends Dropable {
             >
                 {
                     children.map((child) => {
+                        if (child.canWrapFieldDecorator) {
+
+                        }
                         return (
                             <div
                                 key={child.uid}
@@ -37,18 +63,8 @@ class DropCell extends Dropable {
                                     width: 'initial',
                                     padding: '5px 0',
                                 }}
-                                className="dashed-box action-bar-wrapper"
                             >
-                                {renderComponent(preview, child)}
-                                <ActionBar
-                                    show={!preview}
-                                    onEdit={() => {
-                                        onShowPropsEditor(child);
-                                    }}
-                                    onDelete={() => {
-                                        onDeleteConfig(child);
-                                    }}
-                                />
+                                {this.renderContent(child)}
                             </div>
                         );
                     })

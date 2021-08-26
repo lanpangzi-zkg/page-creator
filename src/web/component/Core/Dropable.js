@@ -47,20 +47,29 @@ class Dropable extends React.PureComponent {
             });
         }
     }
+    isAcceptDropComponent() {
+        if (typeof this.isForbidDrop === 'function') { // 是否容许放置拖拽组件
+            return this.isForbidDrop();
+        }
+        return true;
+    }
+    isDropWork(event) {
+        return this.isTarget(event) && this.isAcceptDropComponent();
+    }
     onDragenter(event) {
-        if (this.isTarget(event)) {
+        if (this.isDropWork(event)) {
             event.target.style.background = activeColor;
         }
     }
     onDragLeave(event) {
-        if (this.isTarget(event)) {
+        if (this.isDropWork(event)) {
             event.target.style.background = "";
         }
     }
     onDrop(event) {
         event.preventDefault();
         event.stopPropagation();
-        if (!this.isTarget(event)) {
+        if (!this.isDropWork(event)) {
             return;
         }
         this.resetBg();

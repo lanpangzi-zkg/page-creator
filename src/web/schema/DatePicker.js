@@ -3,6 +3,7 @@ import logic, { style } from './logic';
 export default {
     name: 'DatePicker',
     component: 'DatePicker',
+    canWrapFieldDecorator: true,
     editProps: {
         // type: {
         //     label: 'type',

@@ -4,15 +4,15 @@ import patchSchemaProps from './patchSchemaProps';
 
 const _FormItem = patchSchemaProps(FormItem);
 const children = Array.apply(null, { length: 3 }).map((_, i) => {
-    const formItem = Object.assign({}, _FormItem);
-    const submitId = Math.floor(Math.random() * Math.pow(10, 10));
-    formItem.schemaProps = Object.assign({}, formItem.schemaProps);
-    formItem.editProps = Object.assign({}, formItem.editProps);
-    formItem.schemaProps.submitId = submitId;
-    formItem.editProps.submitId.value = submitId;
+    // const formItem = Object.assign({}, _FormItem);
+    // const submitId = Math.floor(Math.random() * Math.pow(10, 10));
+    // formItem.schemaProps = Object.assign({}, formItem.schemaProps);
+    // formItem.editProps = Object.assign({}, formItem.editProps);
+    // formItem.schemaProps.submitId = submitId;
+    // formItem.editProps.submitId.value = submitId;
     return {
         uid: i,
-        ...formItem,
+        ..._FormItem,
     };
 });
 

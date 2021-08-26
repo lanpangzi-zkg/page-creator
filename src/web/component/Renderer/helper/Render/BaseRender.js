@@ -34,7 +34,7 @@ class BaseRender extends React.PureComponent {
         }, componentProps);
         if (logicProps) {
             const { eventType, openModal, requestApi, eventName } = logicProps;
-            if (eventName && rawProps.htmlType !== 'button' && rawProps.htmlType !== 'reset') { // 有绑定事件
+            if (eventName && rawProps.htmlType !== 'submit' && rawProps.htmlType !== 'reset') { // 有绑定事件，但是要把Button为submit和reset过滤掉
                 let clickHandler = emptyFunc;
                 if (eventType === 'openModal') {
                     clickHandler = () => {

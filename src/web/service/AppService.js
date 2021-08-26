@@ -38,6 +38,7 @@ const mockData = {
 };
 class AppService {
     requestApi(host, method, url, params) {
+		console.log(`${url}->`, params);
 		const validUrl = `${url.startsWith('/') ? url.slice(1) : url}`;
 		return new Promise((resolve) => {
 			setTimeout(() => {
@@ -47,7 +48,6 @@ class AppService {
 				});
 			}, 500);
 		});
-	  mockData[validUrl]
         return axios({
                 method,
             // method: 'post',

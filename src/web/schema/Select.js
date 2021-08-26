@@ -3,6 +3,7 @@ import { transformApiData, style } from './logic';
 export default {
     name: 'Select',
     component: 'Select',
+    canWrapFieldDecorator: true,
     editProps: {
         mode: {
             label: 'mode',

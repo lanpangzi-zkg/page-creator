@@ -99,6 +99,50 @@ const separateProps = (props, customKeys = []) => {
     };
 };
 
+function getFormWrapEditProps() {
+    return {
+        submitId: {
+            label: 'id',
+            type: 'Input',
+            rules: [{
+                required: true,
+                message: '请输入',
+            }],
+        },
+        arrayTypeProps: {
+            arrayTypeValue: 'rules',
+            required: {
+                label: 'required',
+                type: 'Boolean',
+            },
+            message: {
+                label: 'message',
+                type: 'Input',
+            },
+            type: {
+                label: 'type',
+                type: 'Select',
+                options: ['string', 'number', 'boolean', 'integer', 'date', 'url', 'email']
+            },
+            pattern: {
+                label: 'pattern',
+                type: 'Input',
+            },
+            whitespace: {
+                label: 'whitespace',
+                type: 'Boolean',
+            },
+        }
+    };
+}
+function initFormWrapEditProps(configs) {
+    if (!configs.editProps?.submitId) {
+        Object.assign(configs.editProps, getFormWrapEditProps());
+        configs.schemaProps.submitId = Date.now();
+        configs.schemaProps.rules = [];
+    }
+    return configs;
+}
 export default getInitialValue;
 export {
     parseStyle,
@@ -106,4 +150,5 @@ export {
     separateProps,
     filterValidProps,
     reactiveClassName,
+    initFormWrapEditProps,
 };

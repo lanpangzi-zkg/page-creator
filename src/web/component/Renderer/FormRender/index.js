@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { Form, Row, message, Icon } from 'antd';
 import React, { PureComponent, Fragment } from 'react';
 import ActionBar from '../ActionBar';
@@ -80,6 +81,31 @@ class FormRender extends PureComponent {
         const { onUpdateRootConfigs } = this.context;
         onUpdateRootConfigs(newFormItemSchema);
     }
+    searchDatePickerConfig(submitId) {
+        const { configs: { children = [] } } = this.props;
+        const searchQueue = [...children];
+        let result = null;
+        while(searchQueue.length > 0) {
+            let current = searchQueue.shift();
+            if (current.schemaProps?.submitId == submitId) {
+                result = current;
+                break;
+            }
+            if (Array.isArray(current.children)) {
+                searchQueue.push(...current.children);
+            }
+        }
+        return result;
+    }
+    transferDateValues(values) {
+        const defaultFormat = 'YYYY-MM-DD';
+        Object.entries(values).forEach(([k, v]) => {
+            if (moment.isMoment(v)) {
+                const formatStr = this.searchDatePickerConfig(k)?.schemaProps?.format || defaultFormat;
+                values[k] = v.format(formatStr);
+            }
+        });
+    }
     /**
      * @desc 表单提交事件
      * @param {*} e 
@@ -91,14 +117,13 @@ class FormRender extends PureComponent {
             if (!err) {
                 const { global } = this.context;
                 if (configs?.logicProps?.requestApi) {
-                    global.executeRequestApi(configs.logicProps.requestApi, values);
+                    global.executeRequestApi(configs.logicProps.requestApi, this.transferDateValues(values));
                     return;
                 }
                 const rootConfigs = this.getRootConfigs(this.props.configs);
-                if (rootConfigs?.wrapModal) {
+                if (rootConfigs?.wrapModal) { // 如果form放置在Modal内部
                     return;
                 }
-                console.log(values);
                 message.warn('请配置form的依赖接口');
             }
         });
@@ -106,7 +131,7 @@ class FormRender extends PureComponent {
     renderFormItems() {
         const { form, preview, configs } = this.props;
         const { schemaProps, children } = configs;
-        const { col, align } = schemaProps;
+        const { col } = schemaProps;
         return children.map((itemConfigs) => {
             const { uid } = itemConfigs;
             if (!itemConfigs.return) { // 建立与父级配置的关系
@@ -119,7 +144,6 @@ class FormRender extends PureComponent {
                     form={form}
                     preview={preview}
                     configs={itemConfigs}
-                    formItemAlign={align}
                 />
             );
         });

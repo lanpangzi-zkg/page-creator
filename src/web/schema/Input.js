@@ -3,6 +3,7 @@ import logic, { style } from "./logic";
 export default {
     name: 'Input',
     component: 'Input',
+    canWrapFieldDecorator: true,
     editProps: {
         style,
         maxLength: {

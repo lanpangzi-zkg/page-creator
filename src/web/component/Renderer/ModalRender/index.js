@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Spin } from 'antd';
 import { executeRequestApi } from '../../StageContainer/helper';
-import  { renderPageComponent } from '../../Renderer/helper/RenderHelper';
+import  renderComponent from '../../Renderer/helper/RenderHelper';
 class ModalRender extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -14,7 +14,7 @@ class ModalRender extends React.PureComponent {
     }
     renderContent(rootConfigs) {
         if (Array.isArray(rootConfigs?.children)) {
-            return rootConfigs.children.map((child) => renderPageComponent(child, true));
+            return rootConfigs.children.map((child) => renderComponent(child, true));
         }
         return null;
     }

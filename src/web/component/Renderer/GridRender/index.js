@@ -20,7 +20,7 @@ class GridRender extends React.PureComponent {
         onUpdateRootConfigs(newColSchema);
     }
     renderRow() {
-        const { preview, configs } = this.props;
+        const { preview, configs, form } = this.props;
         const { children = [], schemaProps } = configs;
         return (
             <Row {...filterValidProps(schemaProps)}>
@@ -30,6 +30,7 @@ class GridRender extends React.PureComponent {
                     }
                     return (
                         <ColRender
+                            form={form}
                             key={child.uid}
                             configs={child}
                             preview={preview}

@@ -4,6 +4,7 @@ export default {
     name: 'RadioGroup',
     importName: 'Radio',
     component: 'RadioGroup',
+    canWrapFieldDecorator: true,
     editProps: {
         defaultValue: {
             label: 'defaultValue',

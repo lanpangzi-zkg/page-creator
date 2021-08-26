@@ -1,56 +1,58 @@
-import { Form, Col } from 'antd';
-import React, { Component, Fragment } from 'react';
-import AtomRender from '../../AtomRender';
-import getInitialValue, { parseStyle } from '../../helper/PropsHelper';
+import { Form } from 'antd';
+import React, { Component } from 'react';
+import GridRender from '../../GridRender';
+import CommonRender from '../../CommonRender';
+import getInitialValue, { parseStyle, initFormWrapEditProps } from '../../helper/PropsHelper';
 
 class innerRender extends Component {
 	render() {
-        const { configs, form, span, parentConfigs, preview } =this.props;
-        const { getFieldDecorator } = form;
-        const { schemaProps: { submitId, uid, style, rules = [], required } } = parentConfigs;
+        const { configs, form, parentConfigs, preview } =this.props;
+        const { schemaProps: { style } } = parentConfigs;
         const label = parentConfigs?.schemaProps?.label || '';
+        const { getFieldDecorator } = form;
         if (!configs?.component) { // FormItem没有嵌套的子组件
-            // return (
-            //     <Form.Item
-            //         label={label}
-            //         style={parseStyle(style)}
-            //     />
-            // );
             return null;
         }
-        if (required) {
-            rules.push({
-                required: true, message: `请输入${label}`,
-            });
+        if (configs.canWrapFieldDecorator) {
+            initFormWrapEditProps(configs);
+            const { submitId, rules = [] } = configs.schemaProps;
+            return (
+                <Form.Item
+                    label={label}
+                    style={parseStyle(style)}
+                >
+                    {getFieldDecorator(String(submitId), {
+                        rules: rules || [],
+                        initialValue: getInitialValue(configs),
+                    })(
+                        <CommonRender
+                            preview={preview}
+                            configs={configs}
+                        />
+                    )}
+                </Form.Item>
+            );
         }
-		return (
-			<Fragment>
-				<Col span={span}>
-                    {
-                        configs.component !== 'Button' ?
-                            (
-                                <Form.Item
-                                    label={label}
-                                    style={parseStyle(style)}
-                                >
-                                    {getFieldDecorator(String(submitId), {
-                                        rules: rules || [],
-                                        initialValue: getInitialValue(configs),
-                                    })(
-                                        <AtomRender preview={preview} configs={configs} />
-                                    )}
-                                </Form.Item>
-                            ) : (
-                                <Form.Item>
-                                    {
-                                        <AtomRender preview={preview} configs={configs} />
-                                    }
-                                </Form.Item>
-                            )
-                    }
-			    </Col>
-		    </Fragment>
-	    );
+        if (configs.name === 'Grid') { // Grid容许嵌套在Form内部且可以显示Form.Item的label
+            return (
+                <Form.Item
+                    label={label}
+                    style={parseStyle(style)}
+                >
+                    <GridRender
+                        form={form}
+                        preview={preview}
+                        configs={configs}
+                    />
+                </Form.Item>
+            );
+        }
+        return (
+            <CommonRender
+                preview={preview}
+                configs={configs}
+            />
+        );
 	}
 }
 

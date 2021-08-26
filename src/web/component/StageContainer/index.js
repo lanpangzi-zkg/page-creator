@@ -94,9 +94,25 @@ class StageContainer extends Dropable {
     }
     componentDidMount() {
         this.addEvent();
+        document.querySelector('.main-container').addEventListener('mouseover', this.onMouseover);
+        document.querySelector('.main-container').addEventListener('mouseout', this.onMouseout);
     }
     componentWillUnmount() {
         this.removeEvent();
+        document.querySelector('.main-container').removeEventListener('mouseover', this.onMouseover);
+        document.querySelector('.main-container').removeEventListener('mouseout', this.onMouseout);
+    }
+    onMouseover(e) {
+        const classList = e.target.classList;
+        if (classList.contains('dashed-box') && !classList.contains('active')) {
+            classList.add('active');
+        }
+    }
+    onMouseout(e) {
+        const classList = e.target.classList;
+        if (classList.contains('dashed-box') && classList.contains('active')) {
+            classList.remove('active');
+        }
     }
     /**
      * @desc 方便子组件通过context调用

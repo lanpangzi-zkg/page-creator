@@ -1,6 +1,7 @@
 export default {
     name: 'Table',
     component: 'Table',
+    isContainer: true,
     editProps: {
         requestApi: {
             label: '调用接口',

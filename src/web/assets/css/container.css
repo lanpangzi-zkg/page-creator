@@ -1,12 +1,8 @@
-/********drop-container*********/
 .drop-container {
     position: relative;
     vertical-align: middle;
     width: 100%;
     min-height: 40px;
-}
-.drop-container>div {
-    width: 100%;
 }
 .drop-container .ant-tabs-bar {
     margin-bottom: 0;

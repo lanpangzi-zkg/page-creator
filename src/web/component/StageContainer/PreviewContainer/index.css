@@ -13,8 +13,7 @@
     outline: none;
 }
 .preview-container .action-bar-wrapper {
-    /* width: initial; */
+    padding: 0;
     height: initial;
     vertical-align: initial;
-    padding: 0;
 }

@@ -3,6 +3,7 @@ import { style } from './logic';
 export default {
     name: 'Checkbox',
     component: 'Checkbox',
+    canWrapFieldDecorator: true,
     schemaProps: {
         options: [{
             uid: Date.now(),
